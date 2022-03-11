@@ -16,4 +16,19 @@ public class ProjectileMovement : MonoBehaviour
         if (direction.x > 0) _sr.flipX = true;
         gameObject.GetComponent<Rigidbody2D>().AddForce(direction * speed);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerBehaviour pb = collision.gameObject.GetComponent<PlayerBehaviour>();
+            if (pb != null)
+                pb.CallEnnemyCollision();
+            Debug.Log("Hit");
+        }
+        if (!collision.gameObject.CompareTag("Ennemy"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

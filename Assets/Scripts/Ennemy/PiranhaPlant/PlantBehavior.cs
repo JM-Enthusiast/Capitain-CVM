@@ -2,36 +2,42 @@
 
 public class PlantBehavior : MonoBehaviour
 {
-    private RaycastHit2D _hit, _hitBehind;
     [SerializeField]
     private GameObject projectile;
+    [SerializeField]
+    private float shootDelay = 3f;
+    [SerializeField]
+    private float fireRate = 1.75f;
+    private float _shootTimer = 0f;
     private SpriteRenderer _sr;
+    private Animator _animator;
+    private RaycastHit2D[] _raycasts;
     // Start is called before the first frame update
     void Start()
     {
-        _hit = Physics2D.Raycast(transform.position, Vector3.left, 5.5f);
-        _hitBehind = Physics2D.Raycast(transform.position, Vector3.right, 5.5f);
+        _raycasts = new RaycastHit2D[2];
         _sr = this.GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        _animator = this.gameObject.GetComponent<Animator>();
     }
 
     private void FixedUpdate()
     {
-        _hit = Physics2D.Raycast(transform.position, Vector3.left, 5.5f);
-        _hitBehind = Physics2D.Raycast(transform.position, Vector3.right, 5.5f);
+        _raycasts[0] = Physics2D.Raycast(transform.position, Vector3.left, 5.5f);
+        _raycasts[1] = Physics2D.Raycast(transform.position, Vector3.right, 5.5f);
+        if (_shootTimer > 0) _shootTimer -= Time.deltaTime * fireRate;
 
-        if (_hit.collider != null && _hit.collider.CompareTag("Player"))
+
+        foreach (var raycast in _raycasts)
         {
-            ShootProjectile();
-        }
-        if (_hitBehind.collider != null && _hitBehind.collider.CompareTag("Player"))
-        {
-            ShootProjectile();
+            if (raycast.collider != null && raycast.collider.CompareTag("Player"))
+            {
+                if (_shootTimer <= 0)
+                {
+                    _animator.SetTrigger("PlayerInRange");
+                    ShootProjectile();
+                    _shootTimer = shootDelay;
+                }
+            }
         }
     }
 
@@ -48,8 +54,13 @@ public class PlantBehavior : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, _hit.point);
-        Gizmos.DrawLine(transform.position, _hitBehind.point);
+        if (_raycasts != null)
+        {
+            foreach (var raycast in _raycasts)
+            {
+                Gizmos.DrawLine(transform.position, raycast.point);
+            }
+        }
     }
 #endif
 }

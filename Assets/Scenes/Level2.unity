@@ -28009,6 +28009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 2163809204870289204, guid: 13dbc27c3161c5e41a99ce8e19e6ff44,
     type: 3}
+  fireRate: 1.75
 --- !u!1001 &1713373273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38004,6 +38005,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Piranha Plant
       objectReference: {fileID: 0}
+    - target: {fileID: 837859384841229506, guid: d14b7a5321cce774caeb4b4cedeff36f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ennemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3660689816915346032, guid: d14b7a5321cce774caeb4b4cedeff36f,
         type: 3}
       propertyPath: m_Enabled
@@ -38012,7 +38018,7 @@ PrefabInstance:
     - target: {fileID: 6601087254608834488, guid: d14b7a5321cce774caeb4b4cedeff36f,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3660689816915346032, guid: d14b7a5321cce774caeb4b4cedeff36f, type: 3}
