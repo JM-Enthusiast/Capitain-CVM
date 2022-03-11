@@ -10,6 +10,7 @@ public class ProjectileMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Lesgo");
         _sr = this.GetComponent<SpriteRenderer>();
         var direction = (GameObject.Find("Player").transform.position - transform.position).normalized;
         direction = new Vector3(direction.x, 0, 0);
@@ -24,7 +25,6 @@ public class ProjectileMovement : MonoBehaviour
             PlayerBehaviour pb = collision.gameObject.GetComponent<PlayerBehaviour>();
             if (pb != null)
                 pb.CallEnnemyCollision();
-            Debug.Log("Hit");
         }
         if (!collision.gameObject.CompareTag("Ennemy"))
         {

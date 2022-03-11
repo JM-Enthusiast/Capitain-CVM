@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangementScene(Scene current, Scene next)
     {
-        GameObject.Find("Fondu").SetActive(false);
+        GameObject.Find("Fondu")?.SetActive(false);
     }
 
     #endregion

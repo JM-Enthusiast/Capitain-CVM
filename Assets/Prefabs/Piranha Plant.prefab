@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 837859384841229507}
   - component: {fileID: 837859384841229505}
   - component: {fileID: 6601087254608834488}
-  - component: {fileID: 3660689816915346032}
+  - component: {fileID: 1918639489190191899}
+  - component: {fileID: 8838766633284967840}
   m_Layer: 0
   m_Name: Piranha Plant
-  m_TagString: Untagged
+  m_TagString: Ennemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,7 +120,24 @@ CapsuleCollider2D:
   m_Offset: {x: -0.005175273, y: -0.165611}
   m_Size: {x: 0.42054495, y: 0.6482589}
   m_Direction: 0
---- !u!61 &3660689816915346032
+--- !u!114 &1918639489190191899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837859384841229506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48d031b28c1fb144bcc5f653244f7bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 2163809204870289204, guid: 13dbc27c3161c5e41a99ce8e19e6ff44,
+    type: 3}
+  shootDelay: 5
+  fireRate: 1.75
+  hp: 2
+--- !u!61 &8838766633284967840
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,10 +147,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00018286705, y: -0.11144094}
+  m_Offset: {x: -0.0073319077, y: 0.12497333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -143,5 +161,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.6351056, y: 0.33110234}
+  m_Size: {x: 0.2968216, y: 0.12375766}
   m_EdgeRadius: 0
