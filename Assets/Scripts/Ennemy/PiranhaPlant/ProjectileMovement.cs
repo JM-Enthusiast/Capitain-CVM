@@ -10,7 +10,6 @@ public class ProjectileMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Lesgo");
         _sr = GetComponent<SpriteRenderer>();
         var direction = (GameObject.Find("Player").transform.position - transform.position).normalized;
         direction = new Vector3(direction.x, 0, 0);
