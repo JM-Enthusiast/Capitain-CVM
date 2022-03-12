@@ -1,32 +1,32 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Représente les données de jeu
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class PlayerData
 {
     /// <summary>
     /// Niveau sélectionné par l'utilisateur pour le vol. général
     /// </summary>
     [Range(-80, 0)]
-    private float _volumeGeneral = 0;
+    private float _volumeGeneral;
     public float VolumeGeneral { get { return _volumeGeneral; } set { _volumeGeneral = value; } }
 
     /// <summary>
     /// Niveau sélectionné par l'utilisateur pour le vol. de la musique
     /// </summary>
     [Range(-80, 0)]
-    private float _volumeMusique = 0;
+    private float _volumeMusique;
     public float VolumeMusique { get { return _volumeMusique; } set { _volumeMusique = value; } }
 
     /// <summary>
     /// Niveau sélectionné par l'utilisateur pour le vol. de la musique
     /// </summary>
     [Range(-80, 0)]
-    private float _volumeEffet = 0;
+    private float _volumeEffet;
     public float VolumeEffet { get { return _volumeEffet; } set { _volumeEffet = value; } }
 
     /// <summary>
@@ -53,53 +53,53 @@ public class PlayerData
     /// Permet d'identifier les actions sur le UI à réaliser
     /// lors de la perte d'énergie
     /// </summary>
-    public System.Action UIPerteEnergie;
+    public Action UIPerteEnergie;
     /// <summary>
     /// Permet d'identifier les actions sur le UI à réaliser
     /// lors de la perte d'énergie
     /// </summary>
-    public System.Action UIPerteVie;
+    public Action UIPerteVie;
     /// <summary>
     /// Permet d'identifier les actions à réaliser lors d'un gameover
     /// </summary>
-    public System.Action Gameover;
+    public Action Gameover;
 
-    public int Energie { get { return this._energie; } }
-    public int Vie { get { return this._vie; } }
-    public int Score { get { return this._score; } }
-    public string[] ListeCoffreOuvert { get { return this._chestOpenList.ToArray(); } }
+    public int Energie { get { return _energie; } }
+    public int Vie { get { return _vie; } }
+    public int Score { get { return _score; } }
+    public string[] ListeCoffreOuvert { get { return _chestOpenList.ToArray(); } }
 
     public PlayerData()
     {
-        this._vie = 0;
-        this._energie = 0;
-        this._score = 0;
-        this._volumeGeneral = 0;
-        this._volumeMusique = 0;
-        this._volumeEffet = 0;
-        this.UIPerteEnergie = null;
-        this.UIPerteVie = null;
-        this.Gameover = null;
-        this._chestOpenList = new List<string>();
+        _vie = 0;
+        _energie = 0;
+        _score = 0;
+        _volumeGeneral = 0;
+        _volumeMusique = 0;
+        _volumeEffet = 0;
+        UIPerteEnergie = null;
+        UIPerteVie = null;
+        Gameover = null;
+        _chestOpenList = new List<string>();
     }
 
     public PlayerData(int vie = 1, int energie = 2, int score = 0,
         float volumeGeneral = 0, float volumeMusique = 0, float volumeEffet = 0,
-        System.Action uiPerteEnergie = null, System.Action uiPerteVie = null,
-        System.Action gameOver = null, List<string> ChestList = null)
+        Action uiPerteEnergie = null, Action uiPerteVie = null,
+        Action gameOver = null, List<string> ChestList = null)
     {
-        this._vie = vie;
-        this._energie = energie;
-        this._score = score;
-        this._volumeGeneral = volumeGeneral;
-        this._volumeMusique = volumeMusique;
-        this._volumeEffet = volumeEffet;
-        this.UIPerteEnergie += uiPerteEnergie;
-        this.UIPerteVie += uiPerteVie;
-        this.Gameover += gameOver;
-        this._chestOpenList = new List<string>();
+        _vie = vie;
+        _energie = energie;
+        _score = score;
+        _volumeGeneral = volumeGeneral;
+        _volumeMusique = volumeMusique;
+        _volumeEffet = volumeEffet;
+        UIPerteEnergie += uiPerteEnergie;
+        UIPerteVie += uiPerteVie;
+        Gameover += gameOver;
+        _chestOpenList = new List<string>();
         if (ChestList != null)
-            this._chestOpenList = ChestList;
+            _chestOpenList = ChestList;
     }
 
     /// <summary>
@@ -108,11 +108,11 @@ public class PlayerData
     /// <param name="perte">Niveau de perte (par défaut 1)</param>
     public void DecrEnergie(int perte = 1)
     {
-        this._energie -= perte;
-        this.UIPerteEnergie();
-        if (this._energie <= 0)
+        _energie -= perte;
+        UIPerteEnergie();
+        if (_energie <= 0)
         {
-            this.DecrVie();
+            DecrVie();
         }
     }
 
@@ -121,13 +121,13 @@ public class PlayerData
     /// </summary>
     public void DecrVie()
     {
-        this._vie--;
-        this.UIPerteVie();
-        if (this._vie <= 0)
-            this.Gameover();
+        _vie--;
+        UIPerteVie();
+        if (_vie <= 0)
+            Gameover();
         else
         {
-            this.IncrEnergie(MAX_ENERGIE);
+            IncrEnergie(MAX_ENERGIE);
             GameManager.Instance.RechargerNiveau();
         }
     }
@@ -138,14 +138,14 @@ public class PlayerData
     /// <param name="gain">Gain d'augmentation</param>
     public void IncrEnergie(int gain)
     {
-        this._energie += gain;
-        if (this._energie > MAX_ENERGIE)
+        _energie += gain;
+        if (_energie > MAX_ENERGIE)
         {
-            this._energie = 1;
-            this.IncrVie();
+            _energie = 1;
+            IncrVie();
         }
         
-        this.UIPerteEnergie();
+        UIPerteEnergie();
     }
 
     /// <summary>
@@ -154,8 +154,8 @@ public class PlayerData
     /// <param name="gain">Gain d'augmentation</param>
     public void IncrVie(int gain = 1)
     {
-        this._vie += gain;
-        this.UIPerteVie();
+        _vie += gain;
+        UIPerteVie();
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public class PlayerData
     /// <param name="gain">Point gagné</param>
     public void IncrScore(int gain = 1)
     {
-        this._score += gain;
+        _score += gain;
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class PlayerData
     /// <param name="nom">Nom du coffre à ajouter</param>
     public void AjouterCoffreOuvert(string nom)
     {
-        this._chestOpenList.Add(nom);
+        _chestOpenList.Add(nom);
     }
 
     /// <summary>
@@ -184,6 +184,6 @@ public class PlayerData
     /// <returns>true si le coffre est ouvert, false sinon</returns>
     public bool AvoirOuvertureCoffre(string nom)
     {
-        return this._chestOpenList.Contains(nom);
+        return _chestOpenList.Contains(nom);
     }
 }
