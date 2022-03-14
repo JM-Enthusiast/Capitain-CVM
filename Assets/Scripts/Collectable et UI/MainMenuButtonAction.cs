@@ -1,9 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(Button))]
 public class MainMenuButtonAction : MonoBehaviour
 {
+    private void Start()
+    {
+        
+    }
+
     /// <summary>
     /// Permet d'afficher un panel transmis en paramètre
     /// </summary>
@@ -11,6 +18,11 @@ public class MainMenuButtonAction : MonoBehaviour
     public void AfficherPanel(GameObject PanelAOuvrir)
     {
         PanelAOuvrir.SetActive(true);
+        var levels = GameManager.Instance.PlayerData.CompletedLevels;
+        if (levels.Contains("Level1"))
+            GameObject.Find("ButtonNiv2").GetComponent<Button>().interactable = true;
+        if (levels.Contains("Level2"))
+            GameObject.Find("ButtonNiv3").GetComponent<Button>().interactable = true;
     }
 
     /// <summary>

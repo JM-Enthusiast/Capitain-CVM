@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,15 +29,15 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (_instance != null)
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         else
         {
             _instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
 
             // Initialisation des données de jeu
             LoadPlayerData();
-            _audioManager = this.GetComponent<AudioManager>();
+            _audioManager = GetComponent<AudioManager>();
         }
     }
 
@@ -61,14 +62,14 @@ public class GameManager : MonoBehaviour
 
     public void SaveData()
     {
-        StartCoroutine(SaveData(this.PlayerData));
+        StartCoroutine(SaveData(PlayerData));
     }
 
     public IEnumerator SaveData(PlayerData data)
     {
         using (StreamWriter stream = new StreamWriter(
             Path.Combine(Application.persistentDataPath, "savedata_encrypt.json"),
-            false, System.Text.Encoding.UTF8))
+            false, Encoding.UTF8))
         {
             //DataManipulator manipulator = new DataManipulator();
             stream.Write(/*manipulator.Encrypt(*/PlayerDataJson.WriteJson(data)/*)*/);
@@ -83,17 +84,17 @@ public class GameManager : MonoBehaviour
         if (File.Exists(path))
         {
             using (StreamReader stream = new StreamReader(path,
-            System.Text.Encoding.UTF8))
+            Encoding.UTF8))
             {
                 /*DataManipulator manipulator = new DataManipulator();*/
-                this._playerData = PlayerDataJson.ReadJson(/*manipulator.Decrypt(*/stream.ReadToEnd())/*)*/;
+                _playerData = PlayerDataJson.ReadJson(/*manipulator.Decrypt(*/stream.ReadToEnd())/*)*/;
             }
             //DataManipulator manipulator = new DataManipulator();
             //this._playerData = manipulator.Decrypt(path);
         }
         else
         {
-            this._playerData = new PlayerData(4, 2);
+            _playerData = new PlayerData(4);
             SaveData();
         }
     }
@@ -113,8 +114,8 @@ public class GameManager : MonoBehaviour
 
     public void RechargerNiveau()
     {
-        this.PlayerData.UIPerteEnergie = null;
-        this.PlayerData.UIPerteVie = null;
+        PlayerData.UIPerteEnergie = null;
+        PlayerData.UIPerteVie = null;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name,
             LoadSceneMode.Single);
     }

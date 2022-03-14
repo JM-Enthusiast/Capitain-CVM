@@ -69,6 +69,9 @@ public class PlayerData
     public int Score { get { return _score; } }
     public string[] ListeCoffreOuvert { get { return _chestOpenList.ToArray(); } }
 
+    public HashSet<string> UnlockedHelmets { get; }
+    public HashSet<string> CompletedLevels { get; }
+
     public PlayerData()
     {
         _vie = 0;
@@ -81,12 +84,14 @@ public class PlayerData
         UIPerteVie = null;
         Gameover = null;
         _chestOpenList = new List<string>();
+        UnlockedHelmets = new HashSet<string>();
+        CompletedLevels = new HashSet<string>();
     }
 
     public PlayerData(int vie = 1, int energie = 2, int score = 0,
         float volumeGeneral = 0, float volumeMusique = 0, float volumeEffet = 0,
         Action uiPerteEnergie = null, Action uiPerteVie = null,
-        Action gameOver = null, List<string> ChestList = null)
+        Action gameOver = null, List<string> ChestList = null, List<string> unlockedHelmets = null, List<string> completedLevels = null)
     {
         _vie = vie;
         _energie = energie;
@@ -100,6 +105,12 @@ public class PlayerData
         _chestOpenList = new List<string>();
         if (ChestList != null)
             _chestOpenList = ChestList;
+        UnlockedHelmets = new HashSet<string>();
+        if (unlockedHelmets != null)
+            UnlockedHelmets = new HashSet<string>(unlockedHelmets);
+        CompletedLevels = new HashSet<string>();
+        if (completedLevels != null)
+            CompletedLevels = new HashSet<string>(completedLevels);
     }
 
     /// <summary>

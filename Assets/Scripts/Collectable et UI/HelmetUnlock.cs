@@ -1,22 +1,28 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class HelmetUnlock : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Check if is unlocked and if it is, change the color to this dans disable the trigger
+        if (!GameManager.Instance.PlayerData.UnlockedHelmets.Contains(SceneManager.GetActiveScene().name)) return;
+        MarkAsUnlocked();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(SceneManager.GetActiveScene().name);
+        GameManager.Instance.PlayerData.UnlockedHelmets.Add(SceneManager.GetActiveScene().name);
+        MarkAsUnlocked();
+    }
+
+    private void MarkAsUnlocked()
+    {
+        var sr = gameObject.GetComponent<SpriteRenderer>();
+        sr.color = new Color(0, 0, 0, 0.75f);
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
     }
 }

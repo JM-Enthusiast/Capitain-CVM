@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 /// <summary>
 /// Offre un moteur de lecture/écriture du JSON
 /// pour l'objet <code>PlayerData</code>
@@ -18,9 +21,9 @@ public static class PlayerDataJson
         json += tab + "\"vie\":" + data.Vie + "," + newline;
         json += tab + "\"energie\":" + data.Energie + "," + newline;
         json += tab + "\"score\":" + data.Score + "," + newline;
-        json += tab + "\"volumeGeneral\":" + data.VolumeGeneral.ToString().Replace(',', '.') + "," + newline; 
-        json += tab + "\"volumeMusique\":" + data.VolumeMusique.ToString().Replace(',', '.') + "," + newline; 
-        json += tab + "\"volumeEffet\":" + data.VolumeEffet.ToString().Replace(',', '.') + "," + newline; 
+        json += tab + "\"volumeGeneral\":" + data.VolumeGeneral.ToString().Replace(',', '.') + "," + newline;
+        json += tab + "\"volumeMusique\":" + data.VolumeMusique.ToString().Replace(',', '.') + "," + newline;
+        json += tab + "\"volumeEffet\":" + data.VolumeEffet.ToString().Replace(',', '.') + "," + newline;
         json += tab + "\"chestOpenList\":[";
         if (data.ListeCoffreOuvert.Length > 0)
         {
@@ -33,9 +36,47 @@ public static class PlayerDataJson
                     json += ",";
                 json += newline;
             }
+
             json += tab + "]" + newline;
         }
         else json += "]" + newline;
+
+        json += tab + "\"unlockedHelmets\":[";
+        var helmetList = data.UnlockedHelmets.ToArray();
+        if (helmetList.Length > 0)
+        {
+            json += newline;
+            for (int i = 0; i < helmetList.Length; i++)
+            {
+                string helmetData = helmetList[i];
+                json += tab + tab + "\"" + helmetData + "\"";
+                if (i + 1 < helmetList.Length)
+                    json += ",";
+                json += newline;
+            }
+
+            json += tab + "]" + newline;
+        }
+        else json += "]" + newline;
+
+        json += tab + "\"completedLevels\":[";
+        var levelList = data.CompletedLevels.ToArray();
+        if (levelList.Length > 0)
+        {
+            json += newline;
+            for (int i = 0; i < levelList.Length; i++)
+            {
+                string levelData = levelList[i];
+                json += tab + tab + "\"" + levelData + "\"";
+                if (i + 1 < levelList.Length)
+                    json += ",";
+                json += newline;
+            }
+
+            json += tab + "]" + newline;
+        }
+        else json += "]" + newline;
+
         json += "}";
         return json;
     }
@@ -53,7 +94,7 @@ public static class PlayerDataJson
     {
         if (json.Length < 2 || string.IsNullOrEmpty(json))
             throw new
-                System.ArgumentException("La chaîne n'est pas valide");
+                ArgumentException("La chaîne n'est pas valide");
         if (json[0] != '{')
             throw new JSONFormatExpcetion();
         json = json.Replace("\t", string.Empty);
@@ -61,16 +102,18 @@ public static class PlayerDataJson
         int vie = 0, energie = 0, score = 0;
         float vlmGeneral = 0, vlmMusique = 0, vlmEffet = 0;
         List<string> chests = new List<string>();
+        List<string> helmets = new List<string>();
+        List<string> levels = new List<string>();
         string[] lignes = json.Split('\n');
-        
-        for(int i = 1; i < lignes.Length || lignes[i] != "}"; i++)
+
+        for (int i = 1; i < lignes.Length || lignes[i] != "}"; i++)
         {
             if (lignes[i] == "}") break;
 
             string[] parametre = lignes[i].Split(':');
             if (parametre.Length != 2)
                 throw new JSONFormatExpcetion();
-            switch(parametre[0])
+            switch (parametre[0])
             {
                 case "\"vie\"":
                     vie = int.Parse(parametre[1]
@@ -96,22 +139,52 @@ public static class PlayerDataJson
                         break;
                     else if (parametre[1] != "[")
                         throw new JSONFormatExpcetion();
-                    while(lignes[++i] != "]")
+                    while (lignes[++i] != "]")
                     {
                         chests.Add(lignes[i]
                             .Replace(",", string.Empty)
                             .Replace("\"", string.Empty));
                     }
+
+                    break;
+                case "\"unlockedHelmets\"":
+                    if (parametre[1] == "[]")
+                        break;
+                    else if (parametre[1] != "[")
+                        throw new JSONFormatExpcetion();
+                    while (lignes[++i] != "]")
+                    {
+                        helmets.Add(lignes[i]
+                            .Replace(",", string.Empty)
+                            .Replace("\"", string.Empty));
+                    }
+
+                    break;
+                case "\"completedLevels\"":
+                    if (parametre[1] == "[]")
+                        break;
+                    else if (parametre[1] != "[")
+                        throw new JSONFormatExpcetion();
+                    while (lignes[++i] != "]")
+                    {
+                        levels.Add(lignes[i]
+                            .Replace(",", string.Empty)
+                            .Replace("\"", string.Empty));
+                    }
+
                     break;
             }
         }
 
-        return new PlayerData(vie, energie, score, vlmGeneral, vlmMusique, vlmEffet, ChestList: chests);
+        return new PlayerData(vie, energie, score, vlmGeneral, vlmMusique, vlmEffet, ChestList: chests,
+            unlockedHelmets: helmets, completedLevels: levels);
     }
 }
 
-public class JSONFormatExpcetion : System.Exception
+public class JSONFormatExpcetion : Exception
 {
     public JSONFormatExpcetion()
-        : base("La chaîne n'est pas un format reconnu") { }
+        : base("La chaîne n'est pas un format reconnu")
+    {
+    }
 }
