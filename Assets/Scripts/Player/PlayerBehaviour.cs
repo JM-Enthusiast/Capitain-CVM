@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
     /// <summary>
     /// Décrit si l'entité est invulnérable
     /// </summary>
-    private bool _invulnerable = false;
+    private bool _invulnerable;
     /// <summary>
     /// Réfère à l'animator du GO
     /// </summary>
@@ -19,7 +17,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Start()
     {
-        _animator = this.gameObject.GetComponent<Animator>();
+        _animator = gameObject.GetComponent<Animator>();
     }
 
     private void Update()
@@ -41,11 +39,9 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Tilemap Water"))
-        {
-            this.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
-            GameObject.Destroy(this.gameObject);
-            GameManager.Instance.PlayerData.DecrVie();
-        }
+        if (!collision.gameObject.CompareTag("Tilemap Water")) return;
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+        Destroy(gameObject);
+        GameManager.Instance.PlayerData.DecrVie();
     }
 }

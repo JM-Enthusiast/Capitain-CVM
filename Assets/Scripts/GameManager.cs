@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     #region Properties
+
+    [SerializeField] private GameObject fondu;
     /// <summary>
     /// Référence au GameManager
     /// </summary>
@@ -29,11 +31,15 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (_instance != null)
+        {
             Destroy(gameObject);
+            Destroy(fondu);
+        }
         else
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(fondu);
 
             // Initialisation des données de jeu
             LoadPlayerData();
@@ -46,18 +52,6 @@ public class GameManager : MonoBehaviour
         SaveData();
         SceneManager.activeSceneChanged += ChangementScene;
         ChangementScene(new Scene(), SceneManager.GetActiveScene());
-        //List<string> cl = new List<string>();
-        //cl.Add("test_1");
-        //cl.Add("test_2");
-        //cl.Add("test_3");
-        //cl.Add("test_4");
-        //PlayerData test = new PlayerData(
-        //    15, 42, 2022, ChestList: cl
-        //    );
-        //string jdata = PlayerDataJson.WriteJson(test);
-        //Debug.Log(jdata);
-        //PlayerData read = PlayerDataJson.ReadJson(jdata);
-        //Debug.Log(read.Vie);
     }
 
     public void SaveData()
@@ -67,12 +61,11 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator SaveData(PlayerData data)
     {
-        using (StreamWriter stream = new StreamWriter(
+        using (var stream = new StreamWriter(
             Path.Combine(Application.persistentDataPath, "savedata_encrypt.json"),
             false, Encoding.UTF8))
         {
-            //DataManipulator manipulator = new DataManipulator();
-            stream.Write(/*manipulator.Encrypt(*/PlayerDataJson.WriteJson(data)/*)*/);
+            stream.Write(PlayerDataJson.WriteJson(data));
             Debug.Log(Path.Combine(Application.persistentDataPath, "savedata_encrypt.json"));
         }
         yield return new WaitForEndOfFrame();
@@ -86,30 +79,14 @@ public class GameManager : MonoBehaviour
             using (StreamReader stream = new StreamReader(path,
             Encoding.UTF8))
             {
-                /*DataManipulator manipulator = new DataManipulator();*/
-                _playerData = PlayerDataJson.ReadJson(/*manipulator.Decrypt(*/stream.ReadToEnd())/*)*/;
+                _playerData = PlayerDataJson.ReadJson(stream.ReadToEnd());
             }
-            //DataManipulator manipulator = new DataManipulator();
-            //this._playerData = manipulator.Decrypt(path);
         }
         else
         {
             _playerData = new PlayerData(4);
             SaveData();
         }
-    }
-
-    private void Update()
-    {
-        //Debug.Log($"Score : {this._playerData.Score}");
-        //Debug.Log($"Vie : {this._playerData.Vie}, Énergie : {this._playerData.Energie}");
-        //string msg = string.Empty;
-        //foreach (string chest in PlayerData.ListeCoffreOuvert)
-        //{
-        //    msg += chest + ";";
-        //}
-        //Debug.Log($"ChestList : {msg}");
-        //Debug.Log($"Volume général : {_playerData.VolumeGeneral}, Volume musique : {_playerData.VolumeMusique}, Volume effets : {_playerData.VolumeEffet}");
     }
 
     public void RechargerNiveau()
@@ -128,13 +105,14 @@ public class GameManager : MonoBehaviour
     public void ChangerScene(string nomScene)
     {
         _audioManager.StopAudio(0.3f);
-        GameObject.Find("Fondu").SetActive(true);
+        if (!nomScene.Equals("MainMenu"))
+            fondu.SetActive(true);
         SceneManager.LoadScene(nomScene);
     }
 
     public void ChangementScene(Scene current, Scene next)
     {
-        GameObject.Find("Fondu")?.SetActive(false);
+        fondu.SetActive(false);
     }
 
     #endregion

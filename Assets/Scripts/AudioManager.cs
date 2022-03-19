@@ -62,7 +62,7 @@ public class AudioManager : MonoBehaviour
     {
         // Joue la musique pour la scène
         AudioClip clip = null;
-        foreach (AudioElement clipData in _playlist)
+        foreach (var clipData in _playlist)
         {
             if (clipData.Nom.Equals(next.name))
                 clip = clipData.Clip;
@@ -71,7 +71,7 @@ public class AudioManager : MonoBehaviour
             _source.clip = clip;
         else
             _source.clip = _playlist[0].Clip;
-
+        StopAllCoroutines();
         Play(0.3f);
     }
 
@@ -90,7 +90,6 @@ public class AudioManager : MonoBehaviour
         while (_source.volume > 0)
         {
             _source.volume -= startVolume * Time.deltaTime / FadeTime;
-
             yield return null;
         }
 

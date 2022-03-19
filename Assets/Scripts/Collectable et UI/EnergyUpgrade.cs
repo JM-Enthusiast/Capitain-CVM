@@ -11,11 +11,9 @@ public class EnergyUpgrade : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
-        {
-            GameManager.Instance.AudioManager.PlayClipAtPoint(_clip, transform.position);
-            GameManager.Instance.PlayerData.IncrEnergie(_regainEnergie);
-            Destroy(gameObject);
-        }
+        if (!collision.gameObject.tag.Equals("Player")) return;
+        GameManager.Instance.AudioManager.PlayClipAtPoint(_clip, transform.position);
+        GameManager.Instance.PlayerData.IncrEnergie(_regainEnergie);
+        Destroy(gameObject);
     }
 }

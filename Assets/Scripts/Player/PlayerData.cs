@@ -69,6 +69,9 @@ public class PlayerData
     public int Score { get { return _score; } }
     public string[] ListeCoffreOuvert { get { return _chestOpenList.ToArray(); } }
 
+    // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/auto-implemented-properties
+    // Ce syntactic sugar va automatiquement créer les champs privés associés aux propriétés
+    // L'équivalent de ce qui a été fait pour la vie, le score, etc. mais en une seule ligne
     public HashSet<string> UnlockedHelmets { get; }
     public HashSet<string> CompletedLevels { get; }
 
@@ -196,5 +199,43 @@ public class PlayerData
     public bool AvoirOuvertureCoffre(string nom)
     {
         return _chestOpenList.Contains(nom);
+    }
+
+    /// <summary>
+    /// Adds the level to the set
+    /// </summary>
+    /// <param name="level">Name of the completed level</param>
+    public void CompleteLevel(string level)
+    {
+        CompletedLevels.Add(level);
+    }
+    
+    /// <summary>
+    /// Check whether the specified level has been completed
+    /// </summary>
+    /// <param name="level">Name of the level to check</param>
+    /// <returns>true if it has been completed, false otherwise</returns>
+    public bool HasCompletedLevel(string level)
+    {
+        return CompletedLevels.Contains(level);
+    }
+
+    /// <summary>
+    /// Adds the helmet to the set
+    /// </summary>
+    /// <param name="level">Name of the level containing the helmet</param>
+    public void AddUnlockableHelmet(string level)
+    {
+        UnlockedHelmets.Add(level);
+    }
+
+    /// <summary>
+    /// Check whether the specified helmet has been unlocked
+    /// </summary>
+    /// <param name="level">Name of the level containing the helmet to check</param>
+    /// <returns>true if it has been unlocked, false otherwise</returns>
+    public bool HasUnlockedHelmet(string level)
+    {
+        return UnlockedHelmets.Contains(level);
     }
 }

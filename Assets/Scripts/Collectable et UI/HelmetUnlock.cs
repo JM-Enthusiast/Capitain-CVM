@@ -9,13 +9,13 @@ public class HelmetUnlock : MonoBehaviour
     void Start()
     {
         // Check if is unlocked and if it is, change the color to this dans disable the trigger
-        if (!GameManager.Instance.PlayerData.UnlockedHelmets.Contains(SceneManager.GetActiveScene().name)) return;
+        if (!GameManager.Instance.PlayerData.HasUnlockedHelmet(SceneManager.GetActiveScene().name)) return;
         MarkAsUnlocked();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        GameManager.Instance.PlayerData.UnlockedHelmets.Add(SceneManager.GetActiveScene().name);
+        GameManager.Instance.PlayerData.AddUnlockableHelmet(SceneManager.GetActiveScene().name);
         MarkAsUnlocked();
     }
 

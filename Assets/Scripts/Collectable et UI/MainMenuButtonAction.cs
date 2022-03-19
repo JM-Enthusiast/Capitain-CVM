@@ -18,10 +18,9 @@ public class MainMenuButtonAction : MonoBehaviour
     public void AfficherPanel(GameObject PanelAOuvrir)
     {
         PanelAOuvrir.SetActive(true);
-        var levels = GameManager.Instance.PlayerData.CompletedLevels;
-        if (levels.Contains("Level1"))
+        if (GameManager.Instance.PlayerData.HasCompletedLevel("Level1"))
             GameObject.Find("ButtonNiv2").GetComponent<Button>().interactable = true;
-        if (levels.Contains("Level2"))
+        if (GameManager.Instance.PlayerData.HasCompletedLevel("Level2"))
             GameObject.Find("ButtonNiv3").GetComponent<Button>().interactable = true;
     }
 
